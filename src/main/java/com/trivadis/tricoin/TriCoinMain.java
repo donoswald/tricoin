@@ -1,23 +1,15 @@
-package org.web3j.sample;
+package com.trivadis.tricoin;
 
-import com.trivadis.tricoin.TriCoin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.sample.contracts.generated.Greeter;
 import org.web3j.tx.Contract;
 import org.web3j.tx.ManagedTransaction;
-import org.web3j.tx.Transfer;
-import org.web3j.utils.Convert;
-import org.web3j.utils.Numeric;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
@@ -67,12 +59,12 @@ public class TriCoinMain {
         Credentials credentials =
                 WalletUtils.loadCredentials(
                         "a$5w@IOk0",
-                        "/home/michi/.ethereum/testnet/keystore/UTC--2018-04-08T10-59-33.474000000Z--dd06426c25e2a21a121613be469c025088e89d35.json");
+                        "UTC--2018-04-08T10-59-33.474000000Z--dd06426c25e2a21a121613be469c025088e89d35.json");
         log.info("Credentials loaded");
         Credentials bob =
                 WalletUtils.loadCredentials(
                         "a$5w@IOk0",
-                        "/home/michi/.ethereum/testnet/keystore/UTC--2018-04-08T14-29-23.479000000Z--014269ef97299b8eb17d662ca85b49e85f533cd0.json");
+                        "UTC--2018-04-08T14-29-23.479000000Z--014269ef97299b8eb17d662ca85b49e85f533cd0.json");
 
 
 
@@ -87,38 +79,27 @@ public class TriCoinMain {
         log.info("Transaction complete, view it at https://rinkeby.etherscan.io/tx/"
                 + transferReceipt.getTransactionHash());
 */
-        // Now lets deploy a smart contract
+
+
         log.info("Loading smart contract");
         TriCoin contract =   TriCoin.load("0x78021bafea6605a9bba9a7cc8c12b5d2172fc857",web3j,credentials,ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
 
         String contractAddress = contract.getContractAddress();
-        log.info("Smart contract deployed to address " + contractAddress);
         log.info("View contract at https://rinkeby.etherscan.io/address/" + contractAddress);
 
         log.info("Total supply of TriCoins: " + contract.totalSupply().send());
 
         // Lets modify the value in our smart contract
-        log.info("Balance of 0xdd06426c25e2a21a121613be469c025088e89d35: "+contract.balanceOf("0xdd06426c25e2a21a121613be469c025088e89d35").send());
+        log.info("Balance of 0x65A1FeC365a19E2e2Ccd36f51DbD74043A3d572b: " + contract.balanceOf("0x65A1FeC365a19E2e2Ccd36f51DbD74043A3d572b").send());
 
 
+        log.info("transferring 100 TRI to 0x65A1FeC365a19E2e2Ccd36f51DbD74043A3d572b");
         TransactionReceipt transferReceipt = contract.transfer(
-               "0x98F50Aa96e8a96C8788E89bf49fdc68ffaf9e674", BigInteger.valueOf(10)).send();
-        System.out.println("Transfer completed with tx hash: " + transferReceipt.getTransactionHash());
+                "0x65A1FeC365a19E2e2Ccd36f51DbD74043A3d572b", new BigInteger("10000000000000000000")).send();
+        log.info("View Transaction at https://rinkeby.etherscan.io/tx/" + transferReceipt.getTransactionHash());
 
-        // Lets modify the value in our smart contract
-        log.info("Balance of 0x98F50Aa96e8a96C8788E89bf49fdc68ffaf9e674: "+contract.balanceOf("0x98F50Aa96e8a96C8788E89bf49fdc68ffaf9e674").send());
 
-        // Events enable us to log specific events happening during the execution of our smart
-        // contract to the blockchain. Index events cannot be logged in their entirety.
-        // For Strings and arrays, the hash of values is provided, not the original value.
-        // For further information, refer to https://docs.web3j.io/filters.html#filters-and-events
-        /*
-        for (Greeter.ModifiedEventResponse event : contract.getModifiedEvents(transactionReceipt)) {
-            log.info("Modify event fired, previous value: " + event.oldGreeting
-                    + ", new value: " + event.newGreeting);
-            log.info("Indexed event previous value: " + Numeric.toHexString(event.oldGreetingIdx)
-                    + ", new value: " + Numeric.toHexString(event.newGreetingIdx));
-        }
-        */
+        log.info("Balance of 0x65A1FeC365a19E2e2Ccd36f51DbD74043A3d572b: " + contract.balanceOf("0x65A1FeC365a19E2e2Ccd36f51DbD74043A3d572b").send());
+
     }
 }
