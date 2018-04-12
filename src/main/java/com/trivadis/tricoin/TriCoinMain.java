@@ -58,12 +58,12 @@ public class TriCoinMain {
         // We then need to load our Ethereum wallet file
         Credentials credentials =
                 WalletUtils.loadCredentials(
-                        "a$5w@IOk0",
+                        "xxxx",
                         "UTC--2018-04-08T10-59-33.474000000Z--dd06426c25e2a21a121613be469c025088e89d35.json");
         log.info("Credentials loaded");
         Credentials bob =
                 WalletUtils.loadCredentials(
-                        "a$5w@IOk0",
+                        "xxxx",
                         "UTC--2018-04-08T14-29-23.479000000Z--014269ef97299b8eb17d662ca85b49e85f533cd0.json");
 
 
